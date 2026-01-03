@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function Ecommerce() {
 
-  const result = await axios.get('http:localhost:3000/api/auth/cookies')
+  const result = await axios.get('/api/auth/cookies')
   console.log(result)
 
   return (

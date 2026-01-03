@@ -3,7 +3,7 @@ import { supabase } from '../../../../../database/supabase/database';
 import { signData } from '../../../../../schemas/auth/signSchema';
 import bcrypt from 'bcryptjs'
 
-export async function POST(request: Request) {
+export async function POST(request: any) {
   try {
     const res = await request.formData()
 
