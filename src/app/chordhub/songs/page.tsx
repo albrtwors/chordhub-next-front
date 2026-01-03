@@ -3,7 +3,7 @@ import SongGrid from "@/components/chordhub/songs/SongGrid";
 import axios from "axios";
 
 export default async function Page(){
-    const {data} = await axios.get('http://localhost:3000/api/auth/songs')
+    const {data} = await axios.get('/api/auth/songs')
     const {songs} = data
   
     return <div className="flex flex-col gap-3">
