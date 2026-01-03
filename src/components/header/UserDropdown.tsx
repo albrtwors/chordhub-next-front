@@ -12,18 +12,18 @@ export default function UserDropdown() {
   const [userName, setUserName] = useState(false)
 
 
-  // useEffect(()=>{
-  //   try{
-  //   axios.get(`${routeClient()}/api/profile`).then(res=>{
-  //     const name =res.data.name
-  //     setUserName(name)
-  //   })
-  //   }catch(e){
-  //     console.error(e)
-  //   }
+  useEffect(()=>{
+    try{
+    axios.get(`${routeClient()}/api/profile`).then(res=>{
+      const name =res.data.name
+      setUserName(name)
+    })
+    }catch(e){
+      console.error(e)
+    }
     
     
-  // },[])
+  },[])
 function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
   e.stopPropagation();
   setIsOpen((prev) => !prev);
