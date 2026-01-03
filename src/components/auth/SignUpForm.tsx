@@ -36,12 +36,13 @@ export default function SignUpForm() {
           'Content-Type': 'multipart/form-data'
         }
       })
-      
-      if(response.data.state =='error'){
-        Alert.ErrorAlert('Hubo un error', response.data.message)
+     
+  
+      if(response.data.state === 'error'){
+        Alert.ErrorAlert('Error', response.data.message)
         return
       }
-  
+      
       Alert.SuccessAlert('Cargado Exitosamente', response.data.message)
 
 
