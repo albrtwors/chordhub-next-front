@@ -5,7 +5,7 @@ import { signToken } from '../../../../../jwt/jwt';
 import { NextApiResponse } from 'next';
 import { cookies } from 'next/headers';
 
-export async function POST(request: Request, response:NextApiResponse) {
+export async function POST(request:any, response:any) {
   try {
     const res:any = await request.formData()
     const {data, error } = await supabase.from('users').select('*').eq('email', res.get('email'))
