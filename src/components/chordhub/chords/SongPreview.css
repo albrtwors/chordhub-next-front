@@ -1,0 +1,12 @@
+.chord{
+    position:absolute;
+    top:-15px;
+    color:rgb(14, 130, 213);    
+    font-weight: bold;
+}
+.chord-small{
+    position:absolute;
+    top:-15px;
+    color:rgb(14, 130, 213);  
+    font-weight: bold;
+}

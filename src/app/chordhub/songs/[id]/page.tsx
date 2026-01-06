@@ -3,7 +3,7 @@
 import SongPreview from "@/components/chordhub/songs/SongPreview"
 import axios from "axios"
 import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 
 import { routeClient } from "../../../../../constants/defaultPathClient"
 
@@ -38,9 +38,11 @@ export default function Page(){
     
    
 
-    return <div className="flex flex-col gap-5">
+    return <Suspense fallback={<h1 className="text-3xl font-bold">Cargando ...</h1>}>
+    <div className="flex flex-col gap-5">
         <h1 className="text-3xl font-bold">{song && song.name}</h1>
         <SongPreview songStructure={song && song.structure}></SongPreview>
         
     </div>
+    </Suspense>
 }

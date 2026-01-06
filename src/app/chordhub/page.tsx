@@ -10,8 +10,8 @@ import axios from "axios";
 
 export const metadata: Metadata = {
   title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
+    "Chordhub",
+  description: "Pagina para listar canciones y acordes",
 };
 
 export default async function Ecommerce() {

@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useRef, useState,useCallback } from "react";
 import Link from "next/link";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMusic, faGuitar, faFile, faNoteSticky } from '@fortawesome/free-solid-svg-icons'
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
@@ -19,47 +21,46 @@ import {
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
 import { route } from "../../constants/defaultPath";
+import axios from "axios";
+import { routeClient } from "../../constants/defaultPathClient";
+
 
 type NavItem = {
   name: string;
   icon: React.ReactNode;
   path?: string;
-  subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
+  permission?: string;
+  subItems?: { name: string; path: string; pro?: boolean; new?: boolean, permission?:string }[];
 };
 
-const songItems = [
-  {icon:<GridIcon/>,
-   name:'Canciones',
-   subItems:[{name:'Crear', path:route+'/canciones/crear', pro:false}]
 
-
-  }
-]
 
 const navItems: NavItem[] = [
   {
-    icon: <GridIcon />,
+    icon: <FontAwesomeIcon icon={faMusic}/>,
     name: "Canciones",
-    subItems: [{ name: "Canciones", path: '/chordhub/songs', pro: false },{ name: "Crear", path: "/chordhub/songs/create", pro: false },{ name: "Modificar", path: "/", pro: false },{ name: "Eliminar", path: "/", pro: false }],
+    subItems: [{ name: "Canciones", path: '/chordhub/songs', pro: false, permission:'songs.show' },{ name: "Crear", path: "/chordhub/songs/create", pro: false, permission:'songs.create' },{ name: "Modificar", path: "/chordhub/songs/update", pro: false, permission:'songs.edit' },{ name: "Eliminar", path: "/chordhub/songs/destroy", pro: false, permission:'songs.destroy' }],
   },
 
   {
     name: "Cancioneros",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+    icon: <TableIcon />,
+    subItems: [{ name: "Cancioneros", path: '/chordhub/files', pro: false, permission:'files.show' },{ name: "Crear", path: "/chordhub/files/create", pro: false, permission:'files.create' },{ name: "Modificar", path: "/chordhub/files/update", pro: false, permission:'files.edit' },{ name: "Eliminar", path: "/chordhub/files/destroy", pro: false, permission:'files.destroy' }],
   },
   {
     name: "Acordes",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false },{ name: "Mamagueveando", path: "/basic-tables", pro: false }],
+    icon: <FontAwesomeIcon icon={faGuitar} />,
+    subItems: [{ name: "Acordes", path: '/chordhub/chords', pro: false, permission:'chords.show' },{ name: "Crear", path: "/chordhub/chords/create", pro: false, permission:'chords.create' },{ name: "Modificar", path: "/chordhub/chords/update", pro: false, permission:'chords.edit' },{ name: "Eliminar", path: "/chordhub/chords/destroy", pro: false, permission:'chords.destroy' }],
   },
   {
-    name: "Pages",
-    icon: <PageIcon />,
-    subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
-    ],
+    name: "Inventario",
+    icon: <FontAwesomeIcon icon={faFile} />,
+    subItems: [{ name: "Acordes", path: '/chordhub/chords', pro: false, permission:'chords.show' },{ name: "Crear", path: "/chordhub/chords/create", pro: false, permission:'chords.create' },{ name: "Modificar", path: "/chordhub/chords/update", pro: false, permission:'chords.edit' },{ name: "Eliminar", path: "/chordhub/chords/destroy", pro: false, permission:'chords.destroy' }],
+  },
+  {
+    name: "Ensayos",
+    icon: <FontAwesomeIcon icon={faNoteSticky}/>,
+    subItems: [{ name: "Acordes", path: '/chordhub/chords', pro: false, permission:'chords.show' },{ name: "Crear", path: "/chordhub/chords/create", pro: false, permission:'chords.create' },{ name: "Modificar", path: "/chordhub/chords/update", pro: false, permission:'chords.edit' },{ name: "Eliminar", path: "/chordhub/chords/destroy", pro: false, permission:'chords.destroy' }],
   },
 ];
 
@@ -95,9 +96,18 @@ const othersItems: NavItem[] = [
 ];
 
 const AppSidebar: React.FC = () => {
+  
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const [permissions, setPermissions]: any = useState([])
   const pathname = usePathname();
-
+  
+  useEffect(()=>{
+      axios.get(`${routeClient()}/api/profile/permissions`).then((res:any)=>{
+        console.log(res.data)
+        setPermissions(res.data.permissions)
+      })
+  },[])
+  
   const renderMenuItems = (
     navItems: NavItem[],
     menuType: "main" | "others"
@@ -178,44 +188,53 @@ const AppSidebar: React.FC = () => {
               }}
             >
               <ul className="mt-2 space-y-1 ml-9">
-                {nav.subItems.map((subItem) => (
-                  <li key={subItem.name}>
-                    <Link
-                      href={subItem.path}
-                      className={`menu-dropdown-item ${
-                        isActive(subItem.path)
-                          ? "menu-dropdown-item-active"
-                          : "menu-dropdown-item-inactive"
-                      }`}
-                    >
-                      {subItem.name}
-                      <span className="flex items-center gap-1 ml-auto">
-                        {subItem.new && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge `}
-                          >
-                            new
-                          </span>
-                        )}
-                        {subItem.pro && (
-                          <span
-                            className={`ml-auto ${
-                              isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
-                            } menu-dropdown-badge `}
-                          >
-                            pro
-                          </span>
-                        )}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
+                {nav.subItems.map((subItem) => {
+                  
+                  if(permissions.includes(subItem.permission)){
+                      return (
+                                  <li key={subItem.name}>
+                                          <Link
+                                            href={subItem.path}
+                                            className={`menu-dropdown-item ${
+                                              isActive(subItem.path)
+                                                ? "menu-dropdown-item-active"
+                                                : "menu-dropdown-item-inactive"
+                                            }`}
+                                          >
+                                            {subItem.name}
+                                            <span className="flex items-center gap-1 ml-auto">
+                                              {subItem.new && (
+                                                <span
+                                                  className={`ml-auto ${
+                                                    isActive(subItem.path)
+                                                      ? "menu-dropdown-badge-active"
+                                                      : "menu-dropdown-badge-inactive"
+                                                  } menu-dropdown-badge `}
+                                                >
+                                                  new
+                                                </span>
+                                              )}
+                                              {subItem.pro && (
+                                                <span
+                                                  className={`ml-auto ${
+                                                    isActive(subItem.path)
+                                                      ? "menu-dropdown-badge-active"
+                                                      : "menu-dropdown-badge-inactive"
+                                                  } menu-dropdown-badge `}
+                                                >
+                                                  pro
+                                                </span>
+                                              )}
+                                            </span>
+                                          </Link>
+                                  </li>
+                              )
+                  }else{
+                    return []
+                  }
+                 }
+                
+                )}
               </ul>
             </div>
           )}
@@ -309,11 +328,11 @@ const AppSidebar: React.FC = () => {
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link href="/">
+        <Link href="/chordhub">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
 
-            <h1 className="text-[20px] ">CHORDHUB</h1>
+            <h1 className="text-[20px] font-bold">CHORDHUB</h1>
               {/* <Image
                 className="dark:hidden"
                 src="/images/logo/logo.svg"
@@ -370,8 +389,9 @@ const AppSidebar: React.FC = () => {
                     : "justify-start"
                 }`}
               >
+                {/* OTROS */}
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
+                  "Configuraciones"
                 ) : (
                   <HorizontaLDots />
                 )}
@@ -399,7 +419,7 @@ const AppSidebar: React.FC = () => {
 
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
+        
       </div>
     </aside>
   );

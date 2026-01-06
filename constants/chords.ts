@@ -1,0 +1,1 @@
+export const allChords = ['C', 'C#m','Cm', 'D', 'D#m' , 'Dm', 'E', 'Em', 'F','Fm', 'F#', 'F#m', 'G', 'Gm', 'G#', 'G#m', 'A', 'Am', 'A#', 'A#m', 'B', 'Bm']

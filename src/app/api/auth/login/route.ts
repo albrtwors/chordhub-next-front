@@ -9,8 +9,7 @@ export async function POST(request:any, response:any) {
   try {
     const res:any = await request.formData()
     const {data, error } = await supabase.from('users').select('*').eq('email', res.get('email'))
-    const passwdComparisonResult = bcrypt.compareSync(res.get('password'),data![0].password)
-
+ 
 
     if(data?.length===0){
         return NextResponse.json({ state:'error',message: 'El usuario no existe'});
@@ -19,6 +18,7 @@ export async function POST(request:any, response:any) {
     if(error){
         return NextResponse.json({ state:'error',message: 'Error de consulta'});
     }
+    const passwdComparisonResult = bcrypt.compareSync(res.get('password'),data![0].password)
 
     if(!passwdComparisonResult){
         return NextResponse.json({ state:'error',message: 'Credenciales incorrectas'}); 

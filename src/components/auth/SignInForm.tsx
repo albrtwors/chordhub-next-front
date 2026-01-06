@@ -33,7 +33,7 @@ export default function SignInForm() {
 
     Alert.SuccessAlert('Cargado Exitosamente', response.data.message)
     await new Promise((resolve)=>setTimeout(resolve, 1000))
-    window.location.href = '/chordhub'  
+    window.location.href = `${routeClient()}/chordhub`
     
 
   
